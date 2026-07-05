@@ -57,7 +57,11 @@ if tool_calls:
         if tool_call.function.name == "get_weather":
             # Extract arguments and call the python function
             args = json.loads(tool_call.function.arguments)
-            weather_info = get_weather(args.get("city"))
+            city_name = args.get("city")
+            print(f"\n[Tool Execution] Running: get_weather(city='{city_name}')")
+            
+            weather_info = get_weather(city_name)
+            print(f"[Tool Response] Result: {weather_info}")
             
             # Send the result of the function back to the model
             messages.append({
@@ -72,7 +76,9 @@ if tool_calls:
         model="openai/gpt-3.5-turbo",
         messages=messages,
     )
+    print("\n[AI Final Response]:")
     print(second_response.choices[0].message.content)
 else:
     # Direct response if no function call was needed
-    print("harshit shukla",response_message.content)
+    print("\n[AI Final Response]:")
+    print("harshit shukla", response_message.content)
